@@ -8,8 +8,7 @@ const PostSchema = new mongoose.Schema({
   summary:{
     type:String,
     required:true
-  },
-  image:[]
+  }
 })
 
 module.exports = mongoose.model('Post', PostSchema)

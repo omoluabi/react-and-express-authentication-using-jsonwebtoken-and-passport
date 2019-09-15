@@ -13,7 +13,7 @@ strategy(passport)
 app.set('useFindAndModify', false)
 
 // connect to database
-mongoose.connect('mongodb://localhost/tested', {useNewUrlParser: true,
+mongoose.connect('mongodb+srv://crudUser:crudPass@cluster0-fdmkk.mongodb.net/authDB?retryWrites=true', {useNewUrlParser: true,
 useCreateIndex: true, useUnifiedTopology:true}, ()=>{
  console.log('Connected to the database');
 })
@@ -64,6 +64,16 @@ app.get('/api/posts', passport.authenticate("jwt", { session: false }), (req, re
   })
 })
 
+app.post('/api/addPosts', (req, res)=>{
+  const {title, summary} = req.body
+  Post.create({title, summary})
+  .then((data) =>res.json(data))
+  .catch((err) =>{
+    console.log(err)
+    res.json(err)
+  })
+})
+
 app.get('/api/profile/:email', passport.authenticate("jwt", { session: false }), (req, res)=>{
   Login.find({email:req.params.email})
   .select(['email','status', '-_id'])
@@ -73,7 +83,6 @@ app.get('/api/profile/:email', passport.authenticate("jwt", { session: false }),
     res.json(err)
   })
 })
-
 
 //set-up view for production
 if(process.env.NODE_ENV === 'production'){
