@@ -74,9 +74,6 @@ app.get('/api/profile/:email', passport.authenticate("jwt", { session: false }),
   })
 })
 
-app.all('*', (req, res)=>{
-  res.status(401).send('Invalid request')
-})
 
 //set-up view for production
 if(process.env.NODE_ENV === 'production'){
@@ -85,6 +82,10 @@ if(process.env.NODE_ENV === 'production'){
     res.sendFile(path.join(__dirname, 'views', 'build', 'index.html'))
   })
 }
+
+app.all('*', (req, res)=>{
+  res.status(401).send('Invalid request')
+})
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, ()=>console.log(`The app is running on port ${PORT}`))
